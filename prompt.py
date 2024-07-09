@@ -37,27 +37,32 @@ def agent_prompt_suffix(suffix, cat):
 
 @hook
 def before_cat_sends_message(msg, cat):
-    return
-
+    
+    settings = cat.mad_hatter.get_plugin().load_settings()
+    if not settings["enable_double_check"]:
+        return
+    
     declarative_memories = ""
     for m in cat.working_memory.declarative_memories:
-        declarative_memories += " --- " + m.page_content + " ---\n"
+        declarative_memories += " --- " + m[0].page_content + " ---\n"
     else:
         declarative_memories += "(contesto vuoto)"
 
-    prompt = f"""Devi editare la risposta finale di una conversazione, lasciando solo le informazioni che possono essere evinte dal CONTESTO.
-Se tutte le info sono contenute nel CONTESTO, ripeti la risposta. Altrimenti, limita la risposta alle sole informazioni che non sono contenute nel CONTESTO.
-Se il contesto è vuoto, chiedi di caricare documenti a riguardo.
+    prompt = f"""Fact check and review the final response of a conversation, leaving only the information that can be inferred from the contents of the tag <facts>.
+If all the information is contained in the <facts>, repeat the response. Otherwise, recreate the response with only the information that is contained in <facts>.
+If <facts> is empty, ask for document uploads.
 
-CONTESTO:
+<facts>
 {declarative_memories}
+<facts>
 
-CONVERSAZIONE RECENTE E RISPOSTA:
-{cat.stringify_chat_history()}
- - AI (risposta da editare): {msg.content}
+Response to be fact checked (may contain informations not present in the <facts> tag):
+- {msg.content}
 
-RISPOSTA EDITATA:
-"""
+Fact checked response:
+- """
 
+    print(prompt)
     msg.content = cat.llm(prompt)
+    log.critical(f"Prompting for double check: {msg.content}")
     return msg
