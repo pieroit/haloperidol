@@ -1,10 +1,10 @@
 {
     "name": "Haloperidol",
     "version": "0.0.1",
-    "description": "Description of haloperidol.",
-    "author_name": "Me",
-    "author_url": "https://mywebsite.me",
-    "plugin_url": "https://github.com/my_name/haloperidol",
+    "description": "Reduce hallucinations with structured prompting and fact checking. \n This plugin will make your Cat only reply according to what has been said in the past or is present in documents.",
+    "author_name": "Piero Savastano",
+    "author_url": "https://cheshirecat.ai",
+    "plugin_url": "https://github.com/pieroit/haloperidol",
     "tags": "cat, template, example",
-    "thumb": "https://raw.githubusercontent.com/my_repo_path/haloperidol.png"
+    "thumb": "https://raw.githubusercontent.com/pieroit/haloperidol/main/haloperidol.png"
 }
