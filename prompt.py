@@ -3,15 +3,14 @@ from cat.mad_hatter.decorators import hook
 from cat.log import log
 
 
-@hook(priority=1000)
+@hook(priority=-1)
 def agent_prompt_prefix(prefix, cat):
-
-    prefix += """Given the content of the xml tag <memory> below,
+    prefix += """
+Given the content of the xml tag <memory> below,
 go on with conversation only using info retrieved from the <memory> contents.
 It is important you only rely on `<memory>` because we are in a high risk environment.
-If <memory> is empty or irrelevant to the conversation, ask for document uploads or an explanation.
+If <memory> is empty or irrelevant to the conversation, ask for different wording or to contact the community.
 """
-
     return prefix
 
 @hook
@@ -39,7 +38,7 @@ def agent_prompt_suffix(suffix, cat):
 def before_cat_sends_message(msg, cat):
     
     settings = cat.mad_hatter.get_plugin().load_settings()
-    if not settings["enable_double_check"]:
+    if not settings.get("enable_double_check"):
         return
     
     declarative_memories = ""
@@ -62,7 +61,5 @@ Response to be fact checked (may contain informations not present in the <facts>
 Fact checked response:
 - """
 
-    print(prompt)
     msg.content = cat.llm(prompt)
-    log.critical(f"Prompting for double check: {msg.content}")
     return msg

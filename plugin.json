@@ -1,6 +1,6 @@
 {
     "name": "Haloperidol",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Reduce hallucinations with structured prompting and fact checking. \n This plugin will make your Cat only reply according to what has been said in the past or is present in documents.",
     "author_name": "Piero Savastano",
     "author_url": "https://cheshirecat.ai",
